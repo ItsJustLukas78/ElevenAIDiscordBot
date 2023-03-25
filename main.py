@@ -3,7 +3,7 @@ import os
 import subprocess
 import dotenv
 import discord
-from discord.commands import Option
+from discord.commands import Option, OptionChoice
 import logging
 import requests
 from io import BytesIO
@@ -17,9 +17,14 @@ CONSTANT_VOICE_ID = "GFQHWEgWJSK1LDz2fIvd"
 
 bot = discord.Bot()
 
+valid_people = [
+    OptionChoice(name="Atiksh", value="GFQHWEgWJSK1LDz2fIvd"), #  Value must be a string.
+    OptionChoice(name="Jaiveer", value="1ADc1J6ZDdBDU530Ui0l"), #  Value must be a string.
+    OptionChoice(name="Mohit", value="COFlDl1q31sQ94dpE77R") #  Value must be a string.
+]
 
-def synthesize_voice(text, stability, clarity_similarity_boost):
-    url = "https://api.elevenlabs.io/v1/text-to-speech/" + CONSTANT_VOICE_ID
+def synthesize_voice(text, person, stability, clarity_similarity_boost):
+    url = "https://api.elevenlabs.io/v1/text-to-speech/" + person
     headers = {"accept": "audio/mpeg", "xi-api-key": API_KEY}
     data = {
         "text": text,
@@ -50,10 +55,11 @@ async def hello(ctx):
     await ctx.respond("LETS GET THIS JOHN! JIT JITTY JIT JI")
 
 
-@bot.slash_command(name="atiksh", description="make atiksh say some johns")
+@bot.slash_command(name="atiksh", description="make atiksh or jaiveer say some johns")
 async def atiksh(
         ctx,
         text: Option(str, "spoken text", required=True),
+        person: Option(str, "who is speaking", required=False, default=CONSTANT_VOICE_ID, choices=valid_people),
         stability: Option(float, "Make speech more expressive; can also lead to instabilities.", required=False, default=0.2),
         clarity_similarity_boost: Option(float, "Low values are recommended if background artifacts are present in "
                                                 "generated speech.", required=False, default=0.3)
@@ -64,7 +70,7 @@ async def atiksh(
     try:
         await ctx.respond("Synthesizing voice...")
         await ctx.edit(content=f"Stability: {str(stability)}\nClarity+Similarity: {str(clarity_similarity_boost)}\n{shortened_text}",
-                       file=discord.File(synthesize_voice(text, stability, clarity_similarity_boost)))
+                       file=discord.File(synthesize_voice(text, person, stability, clarity_similarity_boost)))
     except Exception as e:
         print(e)
         print("Something went wrong")
