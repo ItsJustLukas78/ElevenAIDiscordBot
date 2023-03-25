@@ -65,7 +65,7 @@ async def hello(ctx):
 async def atiksh(
         ctx,
         text: Option(str, "spoken text", required=True),
-        person: Option(str, "who is speaking", required=False, default=CONSTANT_VOICE_ID, choices=valid_people),
+        person: Option(str, "who is speaking", required=False, default="Atiksh", choices=valid_people),
         stability: Option(float, "Make speech more expressive; can also lead to instabilities.", required=False, default=0.2),
         clarity_similarity_boost: Option(float, "Low values are recommended if background artifacts are present in "
                                                 "generated speech.", required=False, default=0.3)
