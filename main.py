@@ -78,6 +78,8 @@ def synthesize_voice(text, person, stability, clarity_similarity_boost):
                 "+shortest",
                 "-max_interleave_delta",
                 "100M",
+                "-af",
+                "apad=pad_dur=1",
                 "tmp_john.mp4",
             ]
         )
