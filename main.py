@@ -3,33 +3,29 @@ import os
 import subprocess
 import dotenv
 import discord
+from discord.commands import Option
 import logging
 import requests
 from io import BytesIO
 from pydub import AudioSegment
 
-dotenv.load_dotnv()
+dotenv.load_dotenv()
 
 TOKEN = str(os.getenv("TOKEN"))
 API_KEY = str(os.getenv("API_KEY"))
-
-# logger = logging.getLogger('discord')
-# logger.setLevel(logging.DEBUG)
-# handler = logging.FileHandler(filename='/discord.log', encoding='utf-8', mode='a')
-# handler.setFormatter(logging.Formatter('%(asctime)s:%(levelname)s:%(name)s: %(message)s'))
-# logger.addHandler(handler)
+CONSTANT_VOICE_ID = "1ADc1J6ZDdBDU530Ui0l"
 
 bot = discord.Bot()
 
 
-def synthesize_voice(text):
-    url = "https://api.elevenlabs.io/v1/text-to-speech/GFQHWEgWJSK1LDz2fIvd"
+def synthesize_voice(text, stability, clarity_similarity_boost):
+    url = "https://api.elevenlabs.io/v1/text-to-speech/" + CONSTANT_VOICE_ID
     headers = {"accept": "audio/mpeg", "xi-api-key": API_KEY}
     data = {
         "text": text,
         "voice_settings": {
-            "stability": 0.2,
-            "similarity_boost": 0.3,
+            "stability": stability,
+            "similarity_boost": clarity_similarity_boost,
         }
     }
     response = requests.post(url, headers=headers, json=data)
@@ -40,7 +36,7 @@ def synthesize_voice(text):
     else:
         AudioSegment.from_file(BytesIO(response.content)).export("/tmp/john.mp4", format="mp4")
         subprocess.call(
-            ['ffmpeg', '-loop', '1', '-framerate', '1', '-i', 'rizz.jpg', '-i', '/tmp/john.mp4', '-map', '0:v', '-map', '1:a', '-r', '10', '-vf', "scale='iw-mod(iw,2)':'ih-mod(ih,2)',format=yuv420p", '-movflags', '+faststart', '-shortest', '-fflags', '+shortest', '-max_interleave_delta', '100M', 'tmp_john.mp4'])
+            ['ffmpeg', '-y', '-loop', '1', '-framerate', '1', '-i', 'rizz.jpg', '-i', '/tmp/john.mp4', '-map', '0:v', '-map', '1:a', '-r', '10', '-vf', "scale='iw-mod(iw,2)':'ih-mod(ih,2)',format=yuv420p", '-movflags', '+faststart', '-shortest', '-fflags', '+shortest', '-max_interleave_delta', '100M', 'tmp_john.mp4'])
         return "tmp_john.mp4"
 
 
@@ -55,11 +51,20 @@ async def hello(ctx):
 
 
 @bot.slash_command(name="atiksh", description="make atiksh say some johns")
-async def atiksh(ctx, text):
-    shortened_text = text[:75] + "..."
+async def atiksh(
+        ctx,
+        text: Option(str, "spoken text", required=True),
+        stability: Option(float, "Make speech more expressive; can also lead to instabilities.", required=False, default=0.2),
+        clarity_similarity_boost: Option(float, "Low values are recommended if background artifacts are present in "
+                                                "generated speech.", required=False, default=0.3)
+):
+    shortened_text = text[:500] + "..."
+    stability = stability if stability <= 1.0 else 0.2
+    clarity_similarity_boost = clarity_similarity_boost if clarity_similarity_boost <= 1.0 else 0.3
     try:
         await ctx.respond("Synthesizing voice...")
-        await ctx.edit(content=shortened_text, file=discord.File(synthesize_voice(text)))
+        await ctx.edit(content=f"Stability: {str(stability)}\nClarity+Similarity: {str(clarity_similarity_boost)}\n{shortened_text}",
+                       file=discord.File(synthesize_voice(text, stability, clarity_similarity_boost)))
     except Exception as e:
         print(e)
         print("Something went wrong")
