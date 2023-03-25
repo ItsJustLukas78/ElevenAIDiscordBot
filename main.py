@@ -36,7 +36,7 @@ def synthesize_voice(text, stability, clarity_similarity_boost):
     else:
         AudioSegment.from_file(BytesIO(response.content)).export("/tmp/john.mp4", format="mp4")
         subprocess.call(
-            ['ffmpeg', '-y', '-loop', '1', '-framerate', '1', '-i', 'rizz.jpg', '-i', '/tmp/john.mp4', '-map', '0:v', '-map', '1:a', '-r', '10', '-vf', "scale='iw-mod(iw,2)':'ih-mod(ih,2)',format=yuv420p", '-movflags', '+faststart', '-shortest', '-fflags', '+shortest', '-max_interleave_delta', '100M', 'tmp_john.mp4'])
+            ['ffmpeg', '-y', '-loglevel', 'error', '-loop', '1', '-framerate', '1', '-i', 'rizz.jpg', '-i', '/tmp/john.mp4', '-map', '0:v', '-map', '1:a', '-r', '10', '-vf', "scale='iw-mod(iw,2)':'ih-mod(ih,2)',format=yuv420p", '-movflags', '+faststart', '-shortest', '-fflags', '+shortest', '-max_interleave_delta', '100M', 'tmp_john.mp4'])
         return "tmp_john.mp4"
 
 
