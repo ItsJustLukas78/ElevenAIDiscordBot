@@ -18,13 +18,19 @@ CONSTANT_VOICE_ID = "GFQHWEgWJSK1LDz2fIvd"
 bot = discord.Bot()
 
 valid_people = [
-    OptionChoice(name="Atiksh", value="GFQHWEgWJSK1LDz2fIvd"), #  Value must be a string.
-    OptionChoice(name="Jaiveer", value="1ADc1J6ZDdBDU530Ui0l"), #  Value must be a string.
-    OptionChoice(name="Mohit", value="COFlDl1q31sQ94dpE77R") #  Value must be a string.
+    OptionChoice(name="Atiksh"), #  Value must be a string.
+    OptionChoice(name="Jaiveer"), #  Value must be a string.
+    OptionChoice(name="Mohit") #  Value must be a string.
 ]
 
+people_id = {
+    "Atiksh": "GFQHWEgWJSK1LDz2fIvd",
+    "Jaiveer": "1ADc1J6ZDdBDU530Ui0l",
+    "Mohit": "COFlDl1q31sQ94dpE77R"
+}
+
 def synthesize_voice(text, person, stability, clarity_similarity_boost):
-    url = "https://api.elevenlabs.io/v1/text-to-speech/" + person
+    url = "https://api.elevenlabs.io/v1/text-to-speech/" + people_id.get(person, "GFQHWEgWJSK1LDz2fIvd")
     headers = {"accept": "audio/mpeg", "xi-api-key": API_KEY}
     data = {
         "text": text,
@@ -41,7 +47,7 @@ def synthesize_voice(text, person, stability, clarity_similarity_boost):
     else:
         AudioSegment.from_file(BytesIO(response.content)).export("/tmp/john.mp4", format="mp4")
         subprocess.call(
-            ['ffmpeg', '-y', '-loglevel', 'error', '-loop', '1', '-framerate', '1', '-i', 'rizz.jpg', '-i', '/tmp/john.mp4', '-map', '0:v', '-map', '1:a', '-r', '10', '-vf', "scale='iw-mod(iw,2)':'ih-mod(ih,2)',format=yuv420p", '-movflags', '+faststart', '-shortest', '-fflags', '+shortest', '-max_interleave_delta', '100M', 'tmp_john.mp4'])
+            ['ffmpeg', '-y', '-loglevel', 'error', '-loop', '1', '-framerate', '1', '-i', f'{person}.jpg', '-i', '/tmp/john.mp4', '-map', '0:v', '-map', '1:a', '-r', '10', '-vf', "scale='iw-mod(iw,2)':'ih-mod(ih,2)',format=yuv420p", '-movflags', '+faststart', '-shortest', '-fflags', '+shortest', '-max_interleave_delta', '100M', 'tmp_john.mp4'])
         return "tmp_john.mp4"
 
 
