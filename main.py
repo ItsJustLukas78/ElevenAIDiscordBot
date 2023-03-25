@@ -13,7 +13,7 @@ dotenv.load_dotenv()
 
 TOKEN = str(os.getenv("TOKEN"))
 API_KEY = str(os.getenv("API_KEY"))
-CONSTANT_VOICE_ID = "1ADc1J6ZDdBDU530Ui0l"
+CONSTANT_VOICE_ID = "GFQHWEgWJSK1LDz2fIvd"
 
 bot = discord.Bot()
 
