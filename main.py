@@ -20,13 +20,15 @@ bot = discord.Bot()
 valid_people = [
     OptionChoice(name="Atiksh"), #  Value must be a string.
     OptionChoice(name="Jaiveer"), #  Value must be a string.
-    OptionChoice(name="Mohit") #  Value must be a string.
+    OptionChoice(name="Mohit"), #  Value must be a string.
+    OptionChoice(name="Jeia") #  Value must be a string.
 ]
 
 people_id = {
     "Atiksh": "GFQHWEgWJSK1LDz2fIvd",
     "Jaiveer": "1ADc1J6ZDdBDU530Ui0l",
-    "Mohit": "COFlDl1q31sQ94dpE77R"
+    "Mohit": "COFlDl1q31sQ94dpE77R",
+    "Jeia": "PYtn8USM9TUL1bedV8Mo"
 }
 
 def synthesize_voice(text, person, stability, clarity_similarity_boost):
