@@ -12,7 +12,6 @@ dotenv.load_dotenv()
 
 TOKEN = str(os.getenv("TOKEN"))
 API_KEY = str(os.getenv("API_KEY"))
-CONSTANT_VOICE_ID = "GFQHWEgWJSK1LDz2fIvd"
 
 bot = discord.Bot()
 
@@ -71,8 +70,7 @@ def synthesize_voice(text, person, stability, clarity_similarity_boost):
                 "-r",
                 "10",
                 "-vf",
-                "scale='iw-mod(iw,2)':'ih-mod(ih,2)",
-                "format=yuv420p",
+                "scale='iw-mod(iw,2)':'ih-mod(ih,2)', format=yuv420p",
                 "-movflags",
                 "+faststart",
                 "-shortest",
@@ -136,7 +134,7 @@ async def atiksh(
     )
 
 
-@bot.slash_command(name="jaiveer", description="make atiksh speak")
+@bot.slash_command(name="jaiveer", description="make jaiveer speak")
 async def jaiveer(
     ctx,
     text: Option(str, "spoken text", required=True),
@@ -163,7 +161,7 @@ async def jaiveer(
     )
 
 
-@bot.slash_command(name="mohit", description="make atiksh speak")
+@bot.slash_command(name="mohit", description="make mohit speak")
 async def mohit(
     ctx,
     text: Option(str, "spoken text", required=True),
@@ -190,7 +188,7 @@ async def mohit(
     )
 
 
-@bot.slash_command(name="jeia", description="make atiksh speak")
+@bot.slash_command(name="jeia", description="make jeia speak")
 async def jeia(
     ctx,
     text: Option(str, "spoken text", required=True),
